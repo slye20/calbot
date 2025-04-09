@@ -1,7 +1,7 @@
 # ✅ Project Spec: AI Calendar Assistant using Google Calendar API
 
 ## 🔥 Project Name
-**Chronobot** — Your AI-powered personal calendar assistant
+**CalBot** — Your AI-powered personal calendar assistant
 
 ---
 
