@@ -64,5 +64,55 @@ CALENDAR_TOOLS = [
             "additionalProperties": False
         },
         "strict": True
+    },
+    {
+        "type": "function",
+        "name": "cancel_event",
+        "description": "Cancel an event on the user's calendar.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+            "event_id": {
+                "type": "string",
+                "description": "The unique ID of the event to cancel. This is required."
+            }
+        },
+        "required": ["event_id"],
+            "additionalProperties": False
+        },
+        "strict": True
+    },
+    {
+        "type": "function",
+        "name": "reschedule_event",
+        "description": "Reschedule an existing event on the user's calendar to a new time.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "event_id": {
+                    "type": "string",
+                    "description": "The unique ID of the event to reschedule. Optional if query is provided instead."
+                },
+                "query": {
+                    "type": "string",
+                    "description": "Search term to find the event to reschedule if event_id is not provided."
+                },
+                "start_date": {
+                    "type": "string",
+                    "description": "New date for the event in format YYYY-MM-DD or MM/DD/YYYY."
+                },
+                "start_time": {
+                    "type": "string",
+                    "description": "New time for the event in format HH:MM or HH:MM:SS, can include AM/PM."
+                },
+                "duration_minutes": {
+                    "type": "number",
+                    "description": "Duration of the event in minutes. If not provided, the original duration will be preserved."
+                }
+            },
+            "required": ["event_id", "query", "start_date", "start_time", "duration_minutes"],
+            "additionalProperties": False
+        },
+        "strict": True
     }
 ]

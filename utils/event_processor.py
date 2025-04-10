@@ -5,6 +5,8 @@ Process tool calls returned by the OpenAI API and execute the corresponding cale
 import json
 import services.get_events as get_events
 import services.create_events as create_events
+import services.cancel_events as cancel_events
+import services.reschedule_events as reschedule_events
 
 def process_tool_calls(response, input_messages):
     """
@@ -70,3 +72,13 @@ def execute_tool_call(name, args):
             },
         }
         return create_events.create_event(event)
+    elif name == "cancel_event":
+        return cancel_events.cancel_event(event_id=args["event_id"])
+    elif name == "reschedule_event":
+        return reschedule_events.reschedule_event(
+            event_id=args.get("event_id"),
+            query=args.get("query"),
+            start_date=args.get("start_date"),
+            start_time=args.get("start_time"),
+            duration_minutes=args.get("duration_minutes")
+        )

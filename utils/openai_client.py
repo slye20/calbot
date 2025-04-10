@@ -13,26 +13,54 @@ def create_openai_client():
 
 def get_ai_response(client, user_message):
     """
-    Get a response from the AI model with the calendar tools.
+    Get a response from the AI model with the calendar tools for a new conversation.
     
     Args:
         client: OpenAI client instance
         user_message: User's query as a string
         
     Returns:
-        The OpenAI API response
+        Tuple of (input_messages, response)
     """
     # Start with system message including current date/time
     input_messages = [
-        {"role": "system", "content": f"Today's date is {datetime.datetime.now()}"}
+        {"role": "system", "content": f"Today's date is {datetime.datetime.now()}. You are CalBot, an AI calendar assistant. For deleting events, please first search for the events then ask the user to confirm which one to delete."}
     ]
     
     # Add the current user message
     input_messages.append({"role": "user", "content": user_message})
     
-    return input_messages, client.responses.create(
+    response = client.responses.create(
         model="gpt-4o",
         input=input_messages,
+        tools=CALENDAR_TOOLS,
+        tool_choice="auto"
+    )
+    
+    return input_messages, response
+
+def get_ai_response_with_history(client, messages):
+    """
+    Get a response from the AI model with the calendar tools using conversation history.
+    
+    Args:
+        client: OpenAI client instance
+        messages: List of conversation messages
+        
+    Returns:
+        The OpenAI API response
+    """
+    # Make sure we have a system message
+    has_system = any(msg.get("role") == "system" for msg in messages)
+    if not has_system:
+        messages.insert(0, {
+            "role": "system", 
+            "content": f"Today's date is {datetime.datetime.now()}. You are CalBot, an AI calendar assistant. For deleting events, please first search for the events then ask the user to confirm which one to delete."
+        })
+    
+    return client.responses.create(
+        model="gpt-4o",
+        input=messages,
         tools=CALENDAR_TOOLS,
         tool_choice="auto"
     )
